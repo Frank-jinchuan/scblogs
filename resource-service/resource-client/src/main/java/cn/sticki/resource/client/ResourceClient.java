@@ -32,6 +32,8 @@ public interface ResourceClient {
 	 * @param name 图片命名
 	 * @return 是否上传成功
 	 */
+	// bug 这里会通过feign调用其他服务接口，但是报错了。所以会走fallback里面的实现。
+	//-fjc 这里返回是一个Result对象，但是在远程调用的方法中，返回的是一个String对象
 	@PostMapping(value = "/private/resource/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	RestResult<String> uploadAvatarImage(@RequestPart MultipartFile file, @RequestParam String name);
 

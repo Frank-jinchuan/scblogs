@@ -1,5 +1,6 @@
 package cn.sticki.resource.controller;
 
+import cn.sticki.common.result.RestResult;
 import cn.sticki.resource.service.ImageService;
 import cn.sticki.resource.type.FileType;
 import cn.sticki.resource.utils.FileUtils;
@@ -49,11 +50,15 @@ public class UploadController {
 	 * @return 图片链接
 	 */
 	@PostMapping("/avatar")
-	public String uploadAvatar(@NotNull MultipartFile file, @NotNull String name) {
+	public RestResult<String> uploadAvatar(@NotNull MultipartFile file, @NotNull String name) {
 		log.debug("uploadAvatar, fileName->{}", file.getOriginalFilename());
 		log.info("上传了头像{}", name);
 		FileUtils.checkFile(file, 1024 * 1024L, FileType.JPEG, FileType.PNG);
-		return imageService.uploadAvatar(file, name);
+		String s = imageService.uploadAvatar(file, name);
+		if (s == null) {
+			return RestResult.fail("上传头像失败");
+		}
+		return RestResult.ok(s);
 	}
 
 }
